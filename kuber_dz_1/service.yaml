@@ -4,9 +4,9 @@ metadata:
   name: kuber-dz-1
 spec:
   selector:
-    app: kuber-dz-1
+    app: kuber-dz-1-app
   ports:
     - protocol: TCP
       port: 8000
       targetPort: 8000
-  type: LoadBalancer
+  type: NodePort
