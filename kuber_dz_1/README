@@ -1,0 +1,3 @@
+curl arch.homework/health
+
+{"status": "OK"}
