@@ -51,35 +51,35 @@ var routes = Routes{
 	Route{
 		"Index",
 		"GET",
-		"/api/v1//",
+		"/api/v1/",
 		Index,
 	},
 
 	Route{
 		"CreateUser",
 		strings.ToUpper("Post"),
-		"/api/v1//user",
+		"/api/v1/user",
 		CreateUser,
 	},
 
 	Route{
 		"DeleteUser",
 		strings.ToUpper("Delete"),
-		"/api/v1//user/{userId}",
+		"/api/v1/user/{userId}",
 		DeleteUser,
 	},
 
 	Route{
 		"FindUserById",
 		strings.ToUpper("Get"),
-		"/api/v1//user/{userId}",
+		"/api/v1/user/{userId}",
 		FindUserById,
 	},
 
 	Route{
 		"UpdateUser",
 		strings.ToUpper("Put"),
-		"/api/v1//user/{userId}",
+		"/api/v1/user/{userId}",
 		UpdateUser,
 	},
 }
