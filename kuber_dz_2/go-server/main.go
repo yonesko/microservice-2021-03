@@ -10,23 +10,37 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 
-	// WARNING!
-	// Change this to a fully-qualified import path
-	// once you place this file into your project.
-	// For example,
-	//
-	//    sw "github.com/myname/myrepo/go"
-	//
-	sw "./go"
+	_ "github.com/lib/pq"
+
+	"github.com/yonesko/microservice-2021-03/kuber_dz_2/go-server/db"
+	sw "github.com/yonesko/microservice-2021-03/kuber_dz_2/go-server/go"
 )
 
 func main() {
+
 	log.Printf("Server started")
+	log.Fatal(http.ListenAndServe(":8080", sw.NewRouter()))
+}
 
-	router := sw.NewRouter()
+func initRepo() db.Repo {
+	connStr := fmt.Sprintf("user=%s dbname=%s", mustEnv("PG_USER"), mustEnv("PG_DB"))
+	dat, err := sql.Open("postgres", connStr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return db.PgRepo{Db: dat}
+}
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+func mustEnv(s string) string {
+	e := os.Getenv(s)
+	if len(s) == 0 {
+		panic("no " + s + " in ENV")
+	}
+	return e
 }
