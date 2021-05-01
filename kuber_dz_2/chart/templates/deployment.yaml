@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kuber-dz-2
+spec:
+  selector:
+    matchLabels:
+      app: kuber-dz-2-app
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: kuber-dz-2-app
+    spec:
+      containers:
+      - name: kuber-dz-2
+        image: yonesko/microservice-2021-03:kuber_dz_2
+        ports:
+          - name: web
+            containerPort: 8080
