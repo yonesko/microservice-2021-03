@@ -10,9 +10,9 @@
 package swagger
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/gorilla/mux"
 )
@@ -26,60 +26,79 @@ type Route struct {
 
 type Routes []Route
 
-func NewRouter() *mux.Router {
-	router := mux.NewRouter().StrictSlash(true)
-	for _, route := range routes {
-		var handler http.Handler
-		handler = route.HandlerFunc
-		handler = Logger(handler, route.Name)
-
-		router.
-			Methods(route.Method).
-			Path(route.Pattern).
-			Name(route.Name).
-			Handler(handler)
-	}
+func NewRouter(repo Repo) *mux.Router {
+	router := mux.NewRouter()
+	router.
+		Methods("GET").
+		Path("/api/v1/").
+		Name("Index").
+		Handler(Logger(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			_, _ = fmt.Fprintf(w, "Hello World!")
+		}), "Index"))
+	router.
+		Methods("POST").
+		Path("/api/v1/user").
+		Name("CreateUser").
+		Handler(createUser(repo))
+	router.
+		Methods("DELETE").
+		Path("/api/v1/user/{userId}").
+		Name("DeleteUser").
+		Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+			w.WriteHeader(http.StatusOK)
+		}))
+	router.
+		Methods("GET").
+		Path("/api/v1/user/{userId}").
+		Name("FindUserById").
+		Handler(findUser(repo))
+	router.
+		Methods("PUT").
+		Path("/api/v1/user/{userId}").
+		Name("UpdateUser").
+		Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+			w.WriteHeader(http.StatusOK)
+		}))
 
 	return router
 }
 
-func Index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello World!")
+func createUser(repo Repo) http.Handler {
+	return Logger(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user := User{}
+		err := json.NewDecoder(r.Body).Decode(&user)
+		if err != nil {
+			w.WriteHeader(400)
+			_, _ = w.Write([]byte(err.Error()))
+			return
+		}
+		err = repo.SaveUser(user)
+		if err != nil {
+			w.WriteHeader(500)
+			_, _ = w.Write([]byte(err.Error()))
+			return
+		}
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		w.WriteHeader(http.StatusOK)
+	}), "createUser")
 }
+func findUser(repo Repo) http.Handler {
+	return Logger(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user, err := repo.FindUser(5)
+		if err != nil {
+			w.WriteHeader(500)
+			_, _ = w.Write([]byte(err.Error()))
+		}
 
-var routes = Routes{
-	Route{
-		"Index",
-		"GET",
-		"/api/v1/",
-		Index,
-	},
-
-	Route{
-		"CreateUser",
-		strings.ToUpper("Post"),
-		"/api/v1/user",
-		CreateUser,
-	},
-
-	Route{
-		"DeleteUser",
-		strings.ToUpper("Delete"),
-		"/api/v1/user/{userId}",
-		DeleteUser,
-	},
-
-	Route{
-		"FindUserById",
-		strings.ToUpper("Get"),
-		"/api/v1/user/{userId}",
-		FindUserById,
-	},
-
-	Route{
-		"UpdateUser",
-		strings.ToUpper("Put"),
-		"/api/v1/user/{userId}",
-		UpdateUser,
-	},
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		w.WriteHeader(http.StatusOK)
+		bytes, err := json.Marshal(user)
+		if err != nil {
+			w.WriteHeader(500)
+			_, _ = w.Write([]byte(err.Error()))
+		}
+		_, _ = w.Write(bytes)
+	}), "createUser")
 }

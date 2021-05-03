@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="go build main.go" type="GoApplicationRunConfiguration" factoryName="Go Application" nameIsGenerated="true">
+    <module name="kuber_dz_2" />
+    <working_directory value="$PROJECT_DIR$" />
+    <envs>
+      <env name="PG_URI" value="host=localhost port=5432 user=gleb password=secretpassword dbname=kuber-dz-2 sslmode=disable" />
+    </envs>
+    <kind value="FILE" />
+    <filePath value="$PROJECT_DIR$/go-server/main.go" />
+    <directory value="$PROJECT_DIR$" />
+    <method v="2" />
+  </configuration>
+</component>
