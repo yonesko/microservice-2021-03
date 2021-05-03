@@ -11,7 +11,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -34,8 +33,7 @@ func main() {
 }
 
 func initRepo() db.Repo {
-	connStr := fmt.Sprintf("user=%s dbname=%s", mustEnv("PG_USER"), mustEnv("PG_DB"))
-	dat, err := sql.Open("postgres", connStr)
+	dat, err := sql.Open("postgres", "host=localhost port=5432 user=gleb password=secretpassword dbname=kuber-dz-2 sslmode=disable")
 	if err != nil {
 		log.Fatal(err)
 	}
