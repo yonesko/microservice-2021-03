@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kuber-dz-2-initdb-job
+spec:
+  template:
+    metadata:
+      name: kuber-dz-2-initdb-job
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: initdb
+          env:
+            - name: PG_URI
+              valueFrom:
+                secretKeyRef:
+                  name: kuber-dz-2-secret
+                  key: PG_URI
+          image: postgres:latest
+          command:
+            - sh
+            - "-c"
+            - |
+              psql "$PG_URI" <<EOF
+                CREATE TABLE users (
+              id serial PRIMARY KEY,
+              username VARCHAR ( 50 )  NOT NULL,
+              firstName VARCHAR ( 50 ) NOT NULL,
+              lastName VARCHAR ( 50 ) NOT NULL,
+              email VARCHAR ( 255 )  NOT NULL,
+              phone VARCHAR ( 255 )  NOT NULL);
+              EOF
+  backoffLimit: 2
