@@ -33,7 +33,7 @@ func main() {
 }
 
 func initRepo() db.Repo {
-	dat, err := sql.Open("postgres", "host=localhost port=5432 user=gleb password=secretpassword dbname=kuber-dz-2 sslmode=disable")
+	dat, err := sql.Open("postgres", "host=glebpg-postgresql port=5432 user=gleb password=secretpassword dbname=kuber-dz-2 sslmode=disable")
 	if err != nil {
 		log.Fatal(err)
 	}
