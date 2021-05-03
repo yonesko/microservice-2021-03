@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kuber-dz-2
+  name: {{ .Release.Name }}
 spec:
   selector:
     matchLabels:
-      app: kuber-dz-2-app
+      app: {{ .Release.Name }}-app
   replicas: 3
   template:
     metadata:
       labels:
-        app: kuber-dz-2-app
+        app: {{ .Release.Name }}-app
     spec:
       containers:
-      - name: kuber-dz-2
+      - name: {{ .Release.Name }}
         image: yonesko/microservice-2021-03:kuber_dz_2
         imagePullPolicy: Always
         env:
           - name: PG_URI
             valueFrom:
               secretKeyRef:
-                name: kuber-dz-2-secret
+                name: {{ .Release.Name }}-secret
                 key: PG_URI
         ports:
           - name: web

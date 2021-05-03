@@ -1,11 +1,11 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: kuber-dz-2-initdb-job
+  name: {{ .Release.Name }}-initdb-job
 spec:
   template:
     metadata:
-      name: kuber-dz-2-initdb-job
+      name: {{ .Release.Name }}-initdb-job
     spec:
       restartPolicy: Never
       containers:
@@ -14,7 +14,7 @@ spec:
             - name: PG_URI
               valueFrom:
                 secretKeyRef:
-                  name: kuber-dz-2-secret
+                  name: {{ .Release.Name }}-secret
                   key: PG_URI
           image: postgres:latest
           command:
