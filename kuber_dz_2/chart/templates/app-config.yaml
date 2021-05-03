@@ -3,4 +3,4 @@ kind: Secret
 metadata:
   name: kuber-dz-2-secret
 data:
-  PG_URI: gfdfgrthyutrfd
+  PG_URI: aG9zdD1nbGVicGctcG9zdGdyZXNxbCBwb3J0PTU0MzIgdXNlcj1nbGViIHBhc3N3b3JkPXNlY3JldHBhc3N3b3JkIGRibmFtZT1rdWJlci1kei0yIHNzbG1vZGU9ZGlzYWJsZQ==
