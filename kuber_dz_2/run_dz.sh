@@ -1,11 +1,11 @@
-#echo "installing Postgresql.."
-#
-#helm install glebpg \
-#  --set persistenceEnabled=false,postgresqlUsername=gleb,postgresqlPassword=secretpassword,postgresqlDatabase=kuber-dz-2 \
-#  bitnami/postgresql
-#
-#echo "installing App.."
-#helm install glebio-users-crud chart
+echo "installing Postgresql.."
+
+helm install glebpg \
+  --set persistenceEnabled=false,postgresqlUsername=gleb,postgresqlPassword=secretpassword,postgresqlDatabase=kuber-dz-2 \
+  bitnami/postgresql
+
+echo "installing App.."
+helm install glebio-users-crud chart
 
 echo "Test  REST Api by curl.."
 sleep 1
