@@ -46,10 +46,7 @@ func NewRouter(repo Repo) *mux.Router {
 		Methods("DELETE").
 		Path("/api/v1/user/{userId}").
 		Name("DeleteUser").
-		Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-			w.WriteHeader(http.StatusOK)
-		}))
+		Handler(deleteUser(repo))
 	router.
 		Methods("GET").
 		Path("/api/v1/user/{userId}").
@@ -94,11 +91,13 @@ func findUser(repo Repo) http.Handler {
 		if err != nil {
 			w.WriteHeader(500)
 			_, _ = w.Write([]byte(err.Error()))
+			return
 		}
 		user, err := repo.FindUser(int64(id))
 		if err != nil {
 			w.WriteHeader(500)
 			_, _ = w.Write([]byte(err.Error()))
+			return
 		}
 
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -107,7 +106,27 @@ func findUser(repo Repo) http.Handler {
 		if err != nil {
 			w.WriteHeader(500)
 			_, _ = w.Write([]byte(err.Error()))
+			return
 		}
 		_, _ = w.Write(bytes)
-	}), "createUser")
+	}), "findUser")
+}
+func deleteUser(repo Repo) http.Handler {
+	return Logger(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/api/v1/user/"))
+		if err != nil {
+			w.WriteHeader(500)
+			_, _ = w.Write([]byte(err.Error()))
+			return
+		}
+		err = repo.DeleteUser(int64(id))
+		if err != nil {
+			w.WriteHeader(500)
+			_, _ = w.Write([]byte(err.Error()))
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		w.WriteHeader(http.StatusOK)
+	}), "deleteUser")
 }

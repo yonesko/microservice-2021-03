@@ -35,7 +35,11 @@ func (p PgRepo) FindUser(id int64) ([]User, error) {
 }
 
 func (p PgRepo) DeleteUser(id int64) error {
-	panic("implement me")
+	_, err := p.Db.Query("delete from users where id=$1", id)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func parseUsers(rows *sql.Rows) ([]User, error) {
