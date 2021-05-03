@@ -15,6 +15,7 @@ spec:
       containers:
       - name: kuber-dz-2
         image: yonesko/microservice-2021-03:kuber_dz_2
+        imagePullPolicy: Always
         env:
           - name: PG_URI
             valueFrom:
