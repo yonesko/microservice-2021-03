@@ -13,6 +13,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/gorilla/mux"
 )
@@ -85,9 +87,15 @@ func createUser(repo Repo) http.Handler {
 		_, _ = w.Write([]byte(fmt.Sprint(id)))
 	}), "createUser")
 }
+
 func findUser(repo Repo) http.Handler {
 	return Logger(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		user, err := repo.FindUser(5)
+		id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/api/v1/user/"))
+		if err != nil {
+			w.WriteHeader(500)
+			_, _ = w.Write([]byte(err.Error()))
+		}
+		user, err := repo.FindUser(int64(id))
 		if err != nil {
 			w.WriteHeader(500)
 			_, _ = w.Write([]byte(err.Error()))

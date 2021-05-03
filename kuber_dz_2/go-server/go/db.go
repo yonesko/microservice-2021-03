@@ -39,5 +39,14 @@ func (p PgRepo) DeleteUser(id int64) error {
 }
 
 func parseUsers(rows *sql.Rows) ([]User, error) {
-	return nil, nil
+	var r []User
+	for rows.Next() {
+		user := User{}
+		err := rows.Scan(&user.Id, &user.Username, &user.FirstName, &user.LastName, &user.Email, &user.Phone)
+		if err != nil {
+			return nil, err
+		}
+		r = append(r, user)
+	}
+	return r, nil
 }
