@@ -74,7 +74,7 @@ func createUser(repo Repo) http.Handler {
 			_, _ = w.Write([]byte(err.Error()))
 			return
 		}
-		err = repo.SaveUser(user)
+		id, err := repo.SaveUser(user)
 		if err != nil {
 			w.WriteHeader(500)
 			_, _ = w.Write([]byte(err.Error()))
@@ -82,6 +82,7 @@ func createUser(repo Repo) http.Handler {
 		}
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(fmt.Sprint(id)))
 	}), "createUser")
 }
 func findUser(repo Repo) http.Handler {
