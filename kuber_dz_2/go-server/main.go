@@ -23,6 +23,11 @@ import (
 )
 
 func main() {
+	repo := initRepo()
+	_, err := repo.FindUser(5)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	log.Printf("Server started")
 	log.Fatal(http.ListenAndServe(":8080", sw.NewRouter()))
