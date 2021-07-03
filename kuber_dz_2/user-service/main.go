@@ -17,7 +17,7 @@ import (
 
 	_ "github.com/lib/pq"
 
-	sw "github.com/yonesko/microservice-2021-03/kuber_dz_2/go-server/go"
+	sw "github.com/yonesko/microservice-2021-03/kuber_dz_2/user-service/go"
 )
 
 func main() {
